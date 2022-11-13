@@ -6,4 +6,8 @@
   * The first reactjs practice
   * Define Component
   * Fetch open api
+  * Managing states, use effects
   * Apply Styles
+* History
+  * Define Components
+  * TODO...
