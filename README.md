@@ -5,7 +5,7 @@
 * Momentum
   * The first reactjs practice
   * Define Component
-  * Fetch open apis
+  * Fetch open apis with react query
   * Managing states, use effects
   * Apply Styles
 * History

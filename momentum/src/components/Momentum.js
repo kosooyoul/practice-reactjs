@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useQueries } from 'react-query';
 import MomentumApis from '../apis/MomentumApis';
 import TodoApis from '../apis/TodoApis';
 import './Momentum.css'
@@ -6,18 +6,19 @@ import './Momentum.css'
 const Momentum = () => {
   console.log('Initialize Momentum')
 
-  const [timeString, setTimeString] = useState('');
-  const [quote, setQuote] = useState({ author: '', content: '' })
-  const [greeting, setGreeting] = useState('')
-  const [todos, setTodos] = useState([])
+  const options = { refetchOnWindowFocus: true, retry: 1 }
+  const results = useQueries([
+    { queryKey: "fetchCurrentTime", queryFn: () => MomentumApis.fetchCurrentTime() },
+    { queryKey: "fetchQuote", queryFn: () => MomentumApis.fetchQuote() },
+    { queryKey: "fetchGreeting", queryFn: () => MomentumApis.fetchGreeting() },
+    { queryKey: "fetchTodos", queryFn: () => TodoApis.fetchTodos() },
+  ], options);
 
-  useEffect(() => {
-    MomentumApis.fetchCurrentTime().then(time => setTimeString(time))
-    MomentumApis.fetchQuote().then(({ author, content }) => setQuote({ author: author, content: content }))
-    MomentumApis.fetchGreeting().then(greeting => setGreeting(greeting))
-    TodoApis.fetchTodos().then(todos => setTodos(todos))
-  }, [])
-
+  const timeString = results[0].isSuccess? results[0].data: '00:00';
+  const quote = results[1].isSuccess? results[1].data: {};
+  const greeting = results[2].isSuccess? results[2].data: '';
+  const todos = results[3].isSuccess? results[3].data: [];
+  
   return (
     <div className='momentum'>
       <section>
