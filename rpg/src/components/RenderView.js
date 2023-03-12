@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 const RenderView = (props) => {
-  const rootStyle = { position: 'relation', width: '400px', height: '300px', outline: 'none' };
+  const rootStyle = { position: 'relation', width: '800px', height: '600px', outline: 'none' };
   const canvasStyle = { width: '100%', height: '100%' };
 
   const canvasRef = useRef(null);

@@ -8,9 +8,12 @@ const makeTileSet = (x, y, w, h, s) => {
   return tileSet;
 }
 
-const TILE_SET_IMAGE_URL = 'http://localhost:3000/assets/mapchip.bmp';
+const TILE_SET_IMAGE_URL = 'http://localhost:3000/assets/mapchip.png';
 const TILE_SIZE = 16;
-const TILE_SET = makeTileSet(0, 0, 20, 25, TILE_SIZE);
+const TILE_SET = [
+  ... makeTileSet(0, 0, 10, 25, TILE_SIZE),
+  ... makeTileSet(10, 0, 20, 25, TILE_SIZE)
+];
 
 export default class TileSet {
   context;

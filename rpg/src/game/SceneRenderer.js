@@ -1,5 +1,6 @@
 import TileSet from "./TileSet";
 import CharaSet from "./CharaSet";
+import { sampleMapBaseLayer, sampleMapPropLayer, sampleMapOverLayer } from "./SampleMapData";
 
 export default class SceneRenderer {
   context;
@@ -25,28 +26,37 @@ export default class SceneRenderer {
 
   render(width, height) {
     this.frameCount++;
-    this.context.clearRect(0, 0, width, height);
-    this.context.fillStyle = '#000000';
-    this.context.beginPath();
-    const radius = 10 + 10 * Math.abs(Math.sin(this.frameCount * 0.05));
-    this.context.arc(150, 150, radius, 0, 2 * Math.PI);
-    this.context.fill();
+    this._updateDirection();
 
-    this.drawMap();
+    const playerX = this.playerX;
+    const playerY = this.playerY;
+
+    const sight = 8;
+    const minX = Math.max(0, playerX - sight);
+    const maxX = playerX + sight;
+    const minY = Math.max(0, playerY - sight + 1);
+    const maxY = playerY + sight + 1;
+
+    this.drawMap(sampleMapBaseLayer, 0, minX, maxX, minY, maxY);
+    
+    this.drawMap(sampleMapPropLayer, 250, minX, maxX, minY, maxY);
+
     this.drawChara();
+
+    this.drawMap(sampleMapOverLayer, 250, minX, maxX, minY, maxY);
   }
 
-  drawMap() {
-    for(var j = 0; j < 20; j++) {
-      for(var i = 0; i < 30; i++) {
-        this.tileSet.drawTile(20, i * 32, j * 32, 32);
+  drawMap(layer, offset, sx, ex, sy, ey) {
+    for(var j = sy; j <= ey; j++) {
+      for(var i = sx; i <= ex; i++) {
+        if (layer[j][i]) {
+          this.tileSet.drawTile(layer[j][i] + offset, i * 32, j * 32, 32);
+        }
       }
     }
   }
 
   drawChara() {
-    this._updateDirection();
-
     if (this.movable) {
       if (this.moving) {
         this.movable = false;
