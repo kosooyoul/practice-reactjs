@@ -13,8 +13,8 @@ export default class SceneRenderer {
   lastDirection = 'down';
   movable = true;
   moving = false;
-  playerX = 9;
-  playerY = 9;
+  playerX = 10;
+  playerY = 10;
   playerOffsetX = 0;
   playerOffsetY = 0;
 
@@ -32,17 +32,17 @@ export default class SceneRenderer {
     const playerY = this.playerY;
 
     const sightX = 12;
-    const sightY = 8;
+    const sightY = 10;
     const minX = Math.max(0, playerX - sightX);
     const maxX = playerX + sightX;
-    const minY = Math.max(0, playerY - sightY + 1);
-    const maxY = playerY + sightY + 1;
+    const minY = Math.max(0, playerY - sightY);
+    const maxY = playerY + sightY;
 
     this.context.save();
     this.context.translate(width / 2, height / 2);
     this.context.translate(
       -(this.playerX * 32 + 16 + this.playerOffsetX),
-      -(this.playerY * 32 + 48 + this.playerOffsetY),
+      -(this.playerY * 32 + 16 + this.playerOffsetY),
     );
 
     this.drawMap(sampleMapBaseLayer, 0, minX, maxX, minY, maxY);
@@ -70,18 +70,27 @@ export default class SceneRenderer {
     if (this.movable) {
       if (this.moving) {
         this.movable = false;
+        console.log(1);
         if (this.lastDirection == 'left') {
-          this.playerX--;
-          this.playerOffsetX = 32;
+          if (sampleMapPropLayer[this.playerY][this.playerX - 1] == 0) {
+            this.playerX--;
+            this.playerOffsetX = 32;
+          }
         } else if (this.lastDirection == 'right') {
-          this.playerX++;
-          this.playerOffsetX = -32;
+          if (sampleMapPropLayer[this.playerY][this.playerX + 1] == 0) {
+            this.playerX++;
+            this.playerOffsetX = -32;
+          }
         } else if (this.lastDirection == 'up') {
-          this.playerY--;
-          this.playerOffsetY = 32;
+          if (sampleMapPropLayer[this.playerY - 1][this.playerX] == 0) {
+            this.playerY--;
+            this.playerOffsetY = 32;
+          }
         } else if (this.lastDirection == 'down') {
-          this.playerY++;
-          this.playerOffsetY = -32;
+          if (sampleMapPropLayer[this.playerY + 1][this.playerX] == 0) {
+            this.playerY++;
+            this.playerOffsetY = -32;
+          }
         }
       }
     }
@@ -98,13 +107,13 @@ export default class SceneRenderer {
     if (this.moving) {
       this.charaSet.drawChara(0, this.lastDirection, parseInt(this.frameCount / 10),
         this.playerX * 32 - 8 + this.playerOffsetX,
-        this.playerY * 32 + this.playerOffsetY,
+        this.playerY * 32 - 32 + this.playerOffsetY,
         48, 64
       );
     } else {
       this.charaSet.drawChara(0, this.lastDirection, 1,
         this.playerX * 32 - 8 + this.playerOffsetX,
-        this.playerY * 32 + this.playerOffsetY,
+        this.playerY * 32 - 32 + this.playerOffsetY,
         48, 64
       );
     }
