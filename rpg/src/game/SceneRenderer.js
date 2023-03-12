@@ -13,8 +13,8 @@ export default class SceneRenderer {
   lastDirection = 'down';
   movable = true;
   moving = false;
-  playerX = 0;
-  playerY = 0;
+  playerX = 9;
+  playerY = 9;
   playerOffsetX = 0;
   playerOffsetY = 0;
 
@@ -31,11 +31,19 @@ export default class SceneRenderer {
     const playerX = this.playerX;
     const playerY = this.playerY;
 
-    const sight = 8;
-    const minX = Math.max(0, playerX - sight);
-    const maxX = playerX + sight;
-    const minY = Math.max(0, playerY - sight + 1);
-    const maxY = playerY + sight + 1;
+    const sightX = 12;
+    const sightY = 8;
+    const minX = Math.max(0, playerX - sightX);
+    const maxX = playerX + sightX;
+    const minY = Math.max(0, playerY - sightY + 1);
+    const maxY = playerY + sightY + 1;
+
+    this.context.save();
+    this.context.translate(width / 2, height / 2);
+    this.context.translate(
+      -(this.playerX * 32 + 16 + this.playerOffsetX),
+      -(this.playerY * 32 + 48 + this.playerOffsetY),
+    );
 
     this.drawMap(sampleMapBaseLayer, 0, minX, maxX, minY, maxY);
     
@@ -44,12 +52,14 @@ export default class SceneRenderer {
     this.drawChara();
 
     this.drawMap(sampleMapOverLayer, 250, minX, maxX, minY, maxY);
+
+    this.context.restore();
   }
 
   drawMap(layer, offset, sx, ex, sy, ey) {
     for(var j = sy; j <= ey; j++) {
       for(var i = sx; i <= ex; i++) {
-        if (layer[j][i]) {
+        if (layer[j] && layer[j][i]) {
           this.tileSet.drawTile(layer[j][i] + offset, i * 32, j * 32, 32);
         }
       }
