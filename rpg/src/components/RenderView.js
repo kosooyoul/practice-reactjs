@@ -58,7 +58,7 @@ const RenderView = (props) => {
   }, [props.renderer]);
 
   return (
-    <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} onBlur={handleKeyUpAll} tabIndex="1" style={rootStyle}>
+    <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} onBlur={handleKeyUpAll} onContextMenu={handleKeyUpAll} tabIndex="1" style={rootStyle}>
       <canvas ref={canvasRef} style={canvasStyle} />
       <div></div>
     </div>
