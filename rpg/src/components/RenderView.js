@@ -6,13 +6,13 @@ const RenderView = (props) => {
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
-    const renderer = new props.renderer();
+    const renderer = new props.renderer(context);
 
     let animationFrameId;
 
     // 캔버스에 그림 그리기
     const render = () => {
-      renderer.render(context, canvas.width, canvas.height);
+      renderer.render(canvas.width, canvas.height);
       animationFrameId = window.requestAnimationFrame(render);
     };
 
@@ -26,7 +26,7 @@ const RenderView = (props) => {
     };
   }, [props.renderer]);
 
-  return <canvas ref={canvasRef} width="300" height="300" />;
+  return <canvas ref={canvasRef} width="400" height="300" />;
 };
 
 export default RenderView;
