@@ -20,7 +20,7 @@ const Sns = () => {
   const [ profile, setProfile ] = useState({})
 
   useEffect(() => {
-    UserApis.fetchUserProfile(uuid).then(feeds => setProfile(feeds))
+    UserApis.fetchUserProfile(uuid).then(profile => setProfile(profile))
     FeedApis.fetchFeeds(uuid).then(feeds => setFeeds(feeds))
   }, [uuid])
   
